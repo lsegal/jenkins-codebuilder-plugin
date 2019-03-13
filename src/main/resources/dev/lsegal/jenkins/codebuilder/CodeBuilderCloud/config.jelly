@@ -1,0 +1,41 @@
+<?jelly escape-by-default='true'?>
+
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:c="/lib/credentials">
+  <f:entry field="credentialsId" title="${%AWS Credentials}">
+    <c:select />
+  </f:entry>
+
+  <f:entry field="region" title="${%Region}">
+    <f:select />
+  </f:entry>
+
+  <f:entry field="projectName" title="${%Project Name}">
+    <f:select />
+  </f:entry>
+
+  <f:entry field="label" title="${%Label}">
+    <f:textbox />
+  </f:entry>
+
+  <f:entry field="computeType" title="${%Compute Type}">
+    <select>
+      <option value="BUILD_GENERAL1_SMALL">Small (2 vCPUs, 3GB RAM, 64GB Disk)</option>
+      <option value="BUILD_GENERAL1_MEDIUM">Medium (4 vCPUs, 7GB RAM, 128GB Disk)</option>
+      <option value="BUILD_GENERAL1_LARGE">Large (8 vCPUs, 15GB RAM, 128GB Disk)</option>
+    </select>
+  </f:entry>
+
+  <f:advanced>
+    <f:entry field="jenkinsUrl" title="${%Alternative Jenkins URL}">
+      <f:textbox />
+    </f:entry>
+
+    <f:entry field="jnlpImage" title="${%JNLP Docker Image}">
+      <f:textbox default="${descriptor.defaultJnlpImage}" />
+    </f:entry>
+
+    <f:entry field="agentTimeout" title="${%Agent Connection Timeout}">
+      <f:number default="${descriptor.defaultAgentTimeout}" />
+    </f:entry>
+  </f:advanced>
+</j:jelly>

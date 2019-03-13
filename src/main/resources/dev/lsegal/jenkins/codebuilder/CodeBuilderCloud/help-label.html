@@ -1,0 +1,23 @@
+<p>
+  Labels (or tags) are used to group multiple agents into one logical group. For
+  example, if you have multiple Windows agents and you have a job that must run
+  on Windows, then you could configure all your Windows agents to have the label
+  windows, and then tie that job to this label. This would ensure that your job
+  runs on one of your Windows agents, but not on any agents without this label.
+</p>
+
+<p>
+  Labels do not necessarily have to represent the operating system on the agent;
+  you can also use labels to note the CPU architecture, or that a certain tool
+  is installed on the agent.
+</p>
+
+<p>
+  Labels may contain any non-space characters, but you should avoid special
+  characters such as any of these: <code>!&|&lt;&gt;()</code>, as other Jenkins features allow for
+  defining label expressions, where these characters may be used.
+</p>
+
+<p>
+  Note that you can only provide a single label in this box.
+</p>
