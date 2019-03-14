@@ -1,7 +1,18 @@
 # CodeBuilder Plugin for Jenkins
 
 This Jenkins plugin dynamically spins up cloud agents using AWS CodeBuild to
-execute jobs.
+execute jobs as Jenkins builds. This means that instead of using an AWS
+CodeBuild `buildspec.yml` file, the job will be configured and managed by
+Jenkins. This means that steps can be configured directly in the Jenkins UI
+as normal, and pipelines can continue make use of the `Jenkinsfile` with
+no need to migrate configuration.
+
+This plugin is a full drop-in replacement to any other node provider.
+
+## Compatibility and Requirements
+
+This plugin depends on `aws-java-sdk` and `aws-credentials` and is compatible
+with Jenkins 1.651.3+.
 
 ## Usage
 
