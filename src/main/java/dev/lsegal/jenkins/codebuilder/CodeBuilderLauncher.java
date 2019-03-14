@@ -3,6 +3,7 @@ package dev.lsegal.jenkins.codebuilder;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+import com.amazonaws.services.codebuild.model.SourceType;
 import com.amazonaws.services.codebuild.model.StartBuildRequest;
 import com.amazonaws.services.codebuild.model.StartBuildResult;
 
@@ -38,8 +39,9 @@ public class CodeBuilderLauncher extends JNLPLauncher {
     LOGGER.info("[CodeBuilder]: Launching {} with {}", computer, listener);
     CodeBuilderComputer cbcpu = (CodeBuilderComputer) computer;
     StartBuildRequest req = new StartBuildRequest().withProjectName(cloud.getProjectName())
+        .withSourceTypeOverride(SourceType.NO_SOURCE).withBuildspecOverride(buildspec(computer))
         .withImageOverride(cloud.getJnlpImage()).withPrivilegedModeOverride(true)
-        .withComputeTypeOverride(cloud.getComputeType()).withBuildspecOverride(buildspec(computer));
+        .withComputeTypeOverride(cloud.getComputeType());
 
     try {
       StartBuildResult res = cloud.getClient().startBuild(req);
