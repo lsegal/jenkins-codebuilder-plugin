@@ -86,9 +86,7 @@ public class CodeBuilderLauncher extends JNLPLauncher {
     builder.append("phases:\n");
     builder.append("  pre_build:\n");
     builder.append("    commands:\n");
-    builder.append(
-        "      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 >/dev/null &\n");
-    builder.append("      - until docker info; do echo .; sleep 1; done\n");
+    builder.append("      - /usr/local/bin/dockerd-entrypoint.sh\n");
     builder.append("  build:\n");
     builder.append("    commands:\n");
     builder.append("      - " + cmd + " || exit 0\n");

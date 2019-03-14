@@ -46,7 +46,6 @@ public final class CodeBuilderLogger extends BuildWrapper {
       listener.getLogger().println();
     }
     return new Environment() {
-      /* empty implementation */
     };
   }
 }
