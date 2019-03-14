@@ -76,7 +76,7 @@ public class CodeBuilderComputer extends AbstractCloudComputer<CodeBuilderAgent>
       LOGGER.info("[CodeBuilder]: [{}]: Terminating agent after task.", this);
       try {
         Thread.sleep(500);
-        Jenkins.get().removeNode(getNode());
+        Jenkins.getInstance().removeNode(getNode());
       } catch (Exception e) {
         LOGGER.info("[CodeBuilder]: [{}]: Termination error: {}", this, e.getClass());
       }

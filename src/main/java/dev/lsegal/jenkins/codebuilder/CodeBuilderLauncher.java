@@ -24,7 +24,7 @@ public class CodeBuilderLauncher extends JNLPLauncher {
   private boolean launched;
 
   public CodeBuilderLauncher(CodeBuilderCloud cloud) {
-    super(true);
+    super();
     this.cloud = cloud;
   }
 
@@ -67,7 +67,7 @@ public class CodeBuilderLauncher extends JNLPLauncher {
 
       if (computer.getNode() instanceof CodeBuilderAgent) {
         try {
-          Jenkins.get().removeNode(computer.getNode());
+          Jenkins.getInstance().removeNode(computer.getNode());
         } catch (IOException e1) {
           LOGGER.error("Failed to terminate agent: {}", computer.getNode().getDisplayName(), e);
         }

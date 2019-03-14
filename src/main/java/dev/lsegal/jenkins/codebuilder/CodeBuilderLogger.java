@@ -37,7 +37,7 @@ public final class CodeBuilderLogger extends BuildWrapper {
   @Override
   public Environment setUp(@SuppressWarnings("rawtypes") AbstractBuild build, Launcher launcher, BuildListener listener)
       throws IOException, InterruptedException {
-    Computer cpu = Arrays.asList(Jenkins.get().getComputers()).stream()
+    Computer cpu = Arrays.asList(Jenkins.getInstance().getComputers()).stream()
         .filter(c -> c.getChannel() == launcher.getChannel()).findFirst().get();
     if (cpu instanceof CodeBuilderComputer) {
       CodeBuilderComputer cbCpu = (CodeBuilderComputer) cpu;

@@ -81,7 +81,7 @@ public class CodeBuilderCloud extends Cloud {
   @DataBoundConstructor
   public CodeBuilderCloud(String name, @Nonnull String projectName, @Nullable String credentialsId,
       @Nonnull String region) throws InterruptedException {
-    super("codebuilder_" + Jenkins.get().clouds.size());
+    super("codebuilder_" + Jenkins.getInstance().clouds.size());
 
     this.projectName = projectName;
     this.credentialsId = credentialsId;
@@ -98,7 +98,7 @@ public class CodeBuilderCloud extends Cloud {
    * Clear all CodeBuilder nodes on boot-up because these cannot be permanent.
    */
   private static void clearAllNodes() {
-    List<Node> nodes = Jenkins.get().getNodes();
+    List<Node> nodes = Jenkins.getInstance().getNodes();
     if (nodes.size() == 0) {
       return;
     }
@@ -194,11 +194,11 @@ public class CodeBuilderCloud extends Cloud {
 
   @CheckForNull
   private static AmazonWebServicesCredentials getCredentials(@Nullable String credentialsId) {
-    return AWSCredentialsHelper.getCredentials(credentialsId, Jenkins.get());
+    return AWSCredentialsHelper.getCredentials(credentialsId, Jenkins.getInstance());
   }
 
   private static AWSCodeBuild buildClient(String credentialsId, String region) {
-    ProxyConfiguration proxy = Jenkins.get().proxy;
+    ProxyConfiguration proxy = Jenkins.getInstance().proxy;
     ClientConfiguration clientConfiguration = new ClientConfiguration();
 
     if (proxy != null) {
@@ -263,7 +263,7 @@ public class CodeBuilderCloud extends Cloud {
       final Future<Node> nodeResolver = Computer.threadPoolForRemoting.submit(() -> {
         CodeBuilderLauncher launcher = new CodeBuilderLauncher(cloud);
         CodeBuilderAgent agent = new CodeBuilderAgent(cloud, displayName, launcher);
-        Jenkins.get().addNode(agent);
+        Jenkins.getInstance().addNode(agent);
         return agent;
       });
       list.add(new NodeProvisioner.PlannedNode(displayName, nodeResolver, 1));
@@ -278,7 +278,7 @@ public class CodeBuilderCloud extends Cloud {
    * Jenkins host.
    */
   private long numStillProvisioning() {
-    return Jenkins.get().getNodes().stream().filter(CodeBuilderAgent.class::isInstance)
+    return Jenkins.getInstance().getNodes().stream().filter(CodeBuilderAgent.class::isInstance)
         .map(CodeBuilderAgent.class::cast).filter(a -> a.getLauncher().isLaunchSupported()).count();
   }
 
@@ -317,7 +317,7 @@ public class CodeBuilderCloud extends Cloud {
     }
 
     public ListBoxModel doFillCredentialsIdItems() {
-      return AWSCredentialsHelper.doFillCredentialsIdItems(Jenkins.get());
+      return AWSCredentialsHelper.doFillCredentialsIdItems(Jenkins.getInstance());
     }
 
     public ListBoxModel doFillRegionItems() {
