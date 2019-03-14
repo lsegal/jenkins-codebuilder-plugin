@@ -61,3 +61,8 @@ Your configuration might look something like this:
 And that's it, you're all set to trigger new builds on AWS CodeBuild!
 
 [awscli]: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html
+
+## License
+
+This project &copy; 2019 by [Loren Segal](mailto:lsegal@soen.ca) and is
+licensed under the MIT license.

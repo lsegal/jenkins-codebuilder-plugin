@@ -46,6 +46,11 @@ import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 import jenkins.model.JenkinsLocationConfiguration;
 
+/**
+ * This is the root class that contains all configuration state about the
+ * CodeBuilder cloud agents. Jenkins calls {@link CodeBuilderCloud.provision} on
+ * this class to create new nodes.
+ */
 public class CodeBuilderCloud extends Cloud {
   private static final Logger LOGGER = LoggerFactory.getLogger(CodeBuilderCloud.class);
   private static final String DEFAULT_JNLP_IMAGE = "lsegal/jnlp-docker-agent:latest";
@@ -124,7 +129,7 @@ public class CodeBuilderCloud extends Cloud {
   public String getRegion() {
     return region;
   }
-  
+
   @Nonnull
   public String getLabel() {
     return StringUtils.isBlank(label) ? "" : label;
