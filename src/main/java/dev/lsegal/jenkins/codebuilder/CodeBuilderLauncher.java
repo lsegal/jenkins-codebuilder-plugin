@@ -88,7 +88,7 @@ public class CodeBuilderLauncher extends JNLPLauncher {
     builder.append("phases:\n");
     builder.append("  pre_build:\n");
     builder.append("    commands:\n");
-    builder.append("      - /usr/local/bin/dockerd-entrypoint.sh\n");
+    builder.append("      - which dockerd-entrypoint.sh >/dev/null && dockerd-entrypoint.sh || exit 0\n");
     builder.append("  build:\n");
     builder.append("    commands:\n");
     builder.append("      - " + cmd + " || exit 0\n");

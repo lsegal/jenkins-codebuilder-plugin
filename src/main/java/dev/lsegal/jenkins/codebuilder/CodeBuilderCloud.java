@@ -53,7 +53,7 @@ import jenkins.model.JenkinsLocationConfiguration;
  */
 public class CodeBuilderCloud extends Cloud {
   private static final Logger LOGGER = LoggerFactory.getLogger(CodeBuilderCloud.class);
-  private static final String DEFAULT_JNLP_IMAGE = "lsegal/jnlp-docker-agent:latest";
+  private static final String DEFAULT_JNLP_IMAGE = "lsegal/jnlp-docker-agent:alpine";
   private static final int DEFAULT_AGENT_TIMEOUT = 120;
   private static final String DEFAULT_COMPUTE_TYPE = "BUILD_GENERAL1_SMALL";
 
