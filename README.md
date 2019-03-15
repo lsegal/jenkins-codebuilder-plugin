@@ -92,11 +92,14 @@ be:
 
 ```groovy
 pipeline {
-  agent { label 'codebuilder' }
+  agent {
+    label 'codebuilder'
+    docker { image 'node:7-alpine' }
+  }
   stages {
     stage('Build') {
       steps {
-        sh 'docker run -v $(pwd):/build -w /build ruby ruby --version'
+        sh 'node --version'
       }
     }
   }
@@ -111,10 +114,10 @@ pipeline {
   agent { label 'codebuilder' }
   stages {
     stage('Install') {
-      steps { sh 'apk add -U ruby' }
+      steps { sh 'apk add -U nodejs' }
     }
     stage('Build') {
-      steps { sh 'ruby --version' }
+      steps { sh 'node --version' }
     }
   }
 }
