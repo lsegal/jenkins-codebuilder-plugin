@@ -1,4 +1,4 @@
-workflow "Create Release from Tag" {
+workflow "Build and Release" {
   on = "push"
   resolves = [
     "On Tag",
@@ -7,19 +7,19 @@ workflow "Create Release from Tag" {
   ]
 }
 
+action "Build Plugin" {
+  uses = "LucaFeger/action-maven-cli@9d8f23af091bd6f5f0c05c942630939b6e53ce44"
+  args = "package"
+}
+
 action "On Tag" {
   uses = "actions/bin/filter@d820d56839906464fb7a57d1b4e1741cf5183efa"
   args = "tag v*"
-}
-
-action "Build Plugin" {
-  uses = "LucaFeger/action-maven-cli@9d8f23af091bd6f5f0c05c942630939b6e53ce44"
-  args = "clean package"
-  needs = ["On Tag"]
+  needs = ["Build Plugin"]
 }
 
 action "GitHub Release" {
   uses = "./releasetools/hub-release"
-  needs = ["Build Plugin"]
+  needs = ["On Tag"]
   secrets = ["RELEASE_TOKEN"]
 }
