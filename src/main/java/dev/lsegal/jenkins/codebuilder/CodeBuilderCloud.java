@@ -81,7 +81,7 @@ public class CodeBuilderCloud extends Cloud {
   @DataBoundConstructor
   public CodeBuilderCloud(String name, @Nonnull String projectName, @Nullable String credentialsId,
       @Nonnull String region) throws InterruptedException {
-    super("codebuilder_" + Jenkins.getInstance().clouds.size());
+    super(StringUtils.isNotBlank(name) ? name : "codebuilder_" + Jenkins.getInstance().clouds.size());
 
     this.projectName = projectName;
     this.credentialsId = credentialsId;
