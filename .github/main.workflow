@@ -19,7 +19,7 @@ action "Build Plugin" {
 }
 
 action "GitHub Release" {
-  uses = "./releasetools/hub"
+  uses = "./releasetools/hub-release"
   needs = ["Build Plugin"]
   secrets = ["RELEASE_TOKEN"]
 }

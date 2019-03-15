@@ -12,6 +12,7 @@ RUN apk add -U \
   --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
   hub git
 
+WORKDIR /github/workspace
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
