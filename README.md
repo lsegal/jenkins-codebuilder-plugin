@@ -11,10 +11,20 @@ the Jenkins UI as normal, and pipelines can continue make use of the
 Effectively, this plugin is a full drop-in replacement to any other node
 provider.
 
-## Compatibility and Requirements
+## Plugin Installation
 
-This plugin depends on `aws-java-sdk` and `aws-credentials` and is compatible
-with Jenkins 1.651.3+.
+This plugin artifact ID is `codebuilder-cloud` but has yet to be made available
+to the Jenkins plugin repository.
+
+The best way to install this now is to grab the `codebuilder-cloud.hpi`
+artifact from Releases and place the file in `JENKINS_HOME/plugins` (where
+JENKINS_HOME is the location on disk where Jenkins configuration lives)
+and dependencies listed below.
+
+### Compatibility and Requirements
+
+This plugin depends on `aws-java-sdk@1.11.341` and `aws-credentials@1.23` and is
+compatible with Jenkins 1.651.3+.
 
 ## Usage
 
@@ -73,7 +83,102 @@ Your configuration might look something like this:
 
 And that's it, you're all set to trigger new builds on AWS CodeBuild!
 
-[awscli]: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html
+## Configuring Builds with Default JNLP Image
+
+The base image of `lsegal/jnlp-docker-image:alpine` provides a base Alpine
+install with `docker`, and `git`, and Java 8. It is recommended to rely on
+Docker images for building when possible. A `Jenkinsfile` example of this would
+be:
+
+```groovy
+pipeline {
+  agent { label 'codebuilder' }
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker run -v $(pwd):/build -w /build ruby ruby --version'
+      }
+    }
+  }
+}
+```
+
+If you would prefer to install software directly, you can do using your `root`
+privileges on the machine (builds are by default run as a root user):
+
+```groovy
+pipeline {
+  agent { label 'codebuilder' }
+  stages {
+    stage('Install') {
+      steps { sh 'apk add -U ruby' }
+    }
+    stage('Build') {
+      steps { sh 'ruby --version' }
+    }
+  }
+}
+```
+
+Performing package installs can be slow, so to speed up and take advantage
+of CodeBuild caching you may want to create a custom image that contains
+the necessary software tooling. This is described in the next section.
+
+## Creating a Custom JNLP Docker Image
+
+The Docker image that configures agents can be customized to contain other
+build environment tools if needed. To do this, you must create a Docker image
+with a `jenkins-agent` binary that can spawn the [Jenkins Remoting library][remoting]
+and passes arguments over to that jar.
+
+Optionally you can also provide a `dockerd-entrypoint.sh` executable in the
+PATH that spins up a Docker daemon for supporting `docker run` in the instance.
+
+The easiest way to set this up is to create a `Dockerfile` that relies on the pre-existing base image
+`lsegal/jnlp-docker-agent:alpine`, installing all software there:
+
+```dockerfile
+FROM lsegal/jnlp-docker-agent:alpine
+RUN apk add -U ruby
+```
+
+Run `docker build -t myname/myimage .` to build this image and publish it to
+your favorite Docker registry. You can now customize the `jnlpImage`
+configuration option with `myname/myimage` to run builds with extra software
+pre-installed.
+
+## Programmatic Configuration with Groovy
+
+You can automatically configure the CodeBuilder cloud with Groovy init scripts
+by adding a `codebuilder.groovy` to `JENKINS_HOME/init.groovy.d`:
+
+```groovy
+import dev.lsegal.jenkins.codebuilder.CodeBuilderCloud
+import jenkins.model.Jenkins
+
+credentialsId = null                         // IAM profile or credentials file
+region        = System.getenv("AWS_REGION")  // the region for the project
+projectName   = "jenkins-cluster"            // the name of the project
+label         = "codebuild"                  // set a label to limit builds
+jenkinsUrl    = null                         // use default Jenkins URL for JNLP
+jnlpImage     = null                         // use default JNLP Docker image
+computeType   = "BUILD_GENERAL1_SMALL"       // use a small build instance
+
+// Remove previous cloud instances
+jenkins = Jenkins.getInstance()
+prevInstances = jenkins.clouds.findAll { c -> c instanceof CodeBuilderCloud }
+jenkins.clouds.removeAll(prevInstances)
+
+// Re-add this cloud
+cbc = new CodeBuilderCloud(null, projectName, credentialsId, region)
+cbc.setLabel(label)
+cbc.setJenkinsUrl(jenkinsUrl)
+cbc.setJnlpImage(jnlpImage)
+cbc.setComputeType(computeType)
+
+jenkins.clouds.add(cbc);
+jenkins.save()
+```
 
 ## FAQ
 
@@ -123,3 +228,5 @@ licensed under the MIT license.
 [ecsplugin]: https://plugins.jenkins.io/amazon-ecs
 [awsjenkins]: https://docs.aws.amazon.com/codebuild/latest/userguide/jenkins-plugin.html
 [awsjenkinsplugin]: https://github.com/awslabs/aws-codebuild-jenkins-plugin
+[awscli]: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html
+[remoting]: https://jenkins.io/projects/remoting/
