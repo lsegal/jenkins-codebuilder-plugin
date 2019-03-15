@@ -21,6 +21,6 @@ action "Build Plugin" {
 action "GitHub Release" {
   uses = "./releasetools/hub"
   needs = ["Build Plugin"]
-  args = "release create -a target/codebuilder-cloud.hpi ${GITHUB_REF#refs/tags/}"
+  args = "release create -a target/codebuilder-cloud.hpi -m \"Release: ${GITHUB_REF#refs/tags/}\" ${GITHUB_REF#refs/tags/}"
   secrets = ["GITHUB_TOKEN"]
 }
