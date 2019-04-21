@@ -54,6 +54,7 @@ import jenkins.model.JenkinsLocationConfiguration;
 public class CodeBuilderCloud extends Cloud {
   private static final Logger LOGGER = LoggerFactory.getLogger(CodeBuilderCloud.class);
   private static final String DEFAULT_JNLP_IMAGE = "lsegal/jnlp-docker-agent:alpine";
+  private static final String DEFAULT_JNLP_COMMAND = "jenkins-agent";
   private static final int DEFAULT_AGENT_TIMEOUT = 120;
   private static final String DEFAULT_COMPUTE_TYPE = "BUILD_GENERAL1_SMALL";
 
@@ -74,6 +75,7 @@ public class CodeBuilderCloud extends Cloud {
   private String computeType;
   private String jenkinsUrl;
   private String jnlpImage;
+  private String jnlpCommand;
   private int agentTimeout;
 
   private transient AWSCodeBuild client;
@@ -165,6 +167,11 @@ public class CodeBuilderCloud extends Cloud {
   @Nonnull
   public String getJnlpImage() {
     return StringUtils.isBlank(jnlpImage) ? DEFAULT_JNLP_IMAGE : jnlpImage;
+  }
+
+  @Nonnull
+  public String getJnlpCommand() {
+    return StringUtils.isBlank(jnlpCommand) ? DEFAULT_JNLP_COMMAND : jnlpCommand;
   }
 
   @DataBoundSetter
@@ -306,6 +313,9 @@ public class CodeBuilderCloud extends Cloud {
 
     public String getDefaultJnlpImage() {
       return DEFAULT_JNLP_IMAGE;
+    }
+    public String getDefaultJnlpCommand() {
+      return DEFAULT_JNLP_COMMAND;
     }
 
     public int getDefaultAgentTimeout() {

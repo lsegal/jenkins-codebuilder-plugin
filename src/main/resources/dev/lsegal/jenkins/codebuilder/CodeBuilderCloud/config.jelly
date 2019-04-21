@@ -30,6 +30,10 @@
       <f:textbox />
     </f:entry>
 
+    <f:entry field="jnlpCommand" title="${%JNLP Docker Image Command}">
+      <f:textbox default="${descriptor.defaultJnlpCommand}" />
+    </f:entry>
+
     <f:entry field="jnlpImage" title="${%JNLP Docker Image}">
       <f:textbox default="${descriptor.defaultJnlpImage}" />
     </f:entry>
