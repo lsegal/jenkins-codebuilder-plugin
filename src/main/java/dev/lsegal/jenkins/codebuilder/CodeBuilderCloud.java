@@ -179,6 +179,11 @@ public class CodeBuilderCloud extends Cloud {
     this.jnlpImage = jnlpImage;
   }
 
+  @DataBoundSetter
+  public void setJnlpCommand(String jnlpCommand) {
+    this.jnlpCommand = jnlpCommand;
+  }
+
   @Nonnull
   public int getAgentTimeout() {
     return agentTimeout == 0 ? DEFAULT_AGENT_TIMEOUT : agentTimeout;
